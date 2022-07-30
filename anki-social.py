@@ -61,13 +61,14 @@ achievement_ladder("{} days spent reviewing cards", days_spent, [1, 3, 7, 14, 30
 
 section("Reviews")
 streak = 0
-for days_ago in range(14):
+for days_ago in range(365*10):
     from_time = last_midnight - datetime.timedelta(days=days_ago)
     to_time = last_midnight - datetime.timedelta(days=days_ago-1)
 
     count = col.db.scalar("select count() from revlog where id > ? and id < ?",
             timestamp(from_time), timestamp(to_time))
-    print("On %s, you did %d reviews" % (from_time.strftime("%Y-%m-%d"), count))
+    if days_ago <= 14:
+        print("On %s, you did %d reviews" % (from_time.strftime("%Y-%m-%d"), count))
     if count > 0:
         streak += 1
     else:
