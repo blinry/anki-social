@@ -61,6 +61,9 @@ achievement_ladder("{} days spent reviewing cards", days_spent, [1, 3, 7, 14, 30
 
 section("Reviews")
 streak = 0
+current_streak = 0
+max_streak = 0
+current = True
 for days_ago in range(365*10):
     from_time = last_midnight - datetime.timedelta(days=days_ago)
     to_time = last_midnight - datetime.timedelta(days=days_ago-1)
@@ -72,9 +75,14 @@ for days_ago in range(365*10):
     if count > 0:
         streak += 1
     else:
+        if current:
+            current_streak = streak
+            current = False
+        max_streak = max(streak, max_streak)
         streak = 0
-print("\nYou are on a %d-day streak!" % streak)
-achievement_ladder("{}-day streak", streak, [3, 7, 14, 30, 50, 75, 125, 180, 250, 365])
+print("\nYou are on a %d-day streak!" % current_streak)
+print("Your best streak was a %d-day streak!" % max_streak)
+achievement_ladder("{}-day streak", max_streak, [3, 7, 14, 30, 50, 75, 125, 180, 250, 365])
 
 section("Creations")
 for months_ago in range(1,12):
