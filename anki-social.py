@@ -3,9 +3,16 @@ import datetime
 import glob
 import appdirs
 
-path = glob.glob(appdirs.user_config_dir(appname="anki") + "/**/collection.anki2")
+path = ""
+for appname in ("anki", "Anki2"):
+    path = glob.glob(appdirs.user_config_dir(appname=appname) + "/**/collection.anki2")
+    if path:
+        break
+    path = glob.glob(appdirs.user_data_dir(appname=appname) + "/**/collection.anki2")
+    if path:
+        break
 
-if len(path) == 0:
+if not path:
     print("No Anki collection found")
     exit(1)
 
