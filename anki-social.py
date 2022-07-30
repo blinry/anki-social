@@ -1,22 +1,33 @@
+from pathlib import Path
 import sqlite3
 import datetime
 import glob
 import appdirs
+import os
 
-path = ""
-for appname in ("anki", "Anki2"):
-    path = glob.glob(appdirs.user_config_dir(appname=appname) + "/**/collection.anki2")
-    if path:
-        break
-    path = glob.glob(appdirs.user_data_dir(appname=appname) + "/**/collection.anki2")
-    if path:
-        break
+def find_anki_db():
+    path = None
+    for appname in ("anki", "Anki2"):
+        path = glob.glob(appdirs.user_config_dir(appname=appname) + "/**/collection.anki2")
+        if path:
+            path = path[0]
+            break
+        path = glob.glob(appdirs.user_data_dir(appname=appname) + "/**/collection.anki2")
+        if path:
+            path = path[0]
+            break
+    if not path:
+        path = str(Path.home()) + "/storage/shared/AnkiDroid/collection.anki2"
+        if not os.path.exists(path):
+            path = None
+    return path
 
+path = find_anki_db()
 if not path:
     print("No Anki collection found")
     exit(1)
 
-con = sqlite3.connect(path[0])
+con = sqlite3.connect("file:"+path+"?immutable=1", uri=True)
 
 def timestamp(dt):
     return int(dt.timestamp()*1000)
