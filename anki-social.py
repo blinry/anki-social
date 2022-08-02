@@ -102,8 +102,9 @@ for days_ago in range(365*10):
         max_streak = max(streak, max_streak)
         streak = 0
 print("\nYou are on a %d-day streak!" % current_streak)
+achievement_ladder("{}-day current streak", current_streak, [3, 7, 14, 30, 50, 75, 125, 180, 250, 365])
 print("Your best streak was a %d-day streak!" % max_streak)
-achievement_ladder("{}-day streak", max_streak, [3, 7, 14, 30, 50, 75, 125, 180, 250, 365])
+achievement_ladder("{}-day maximum streak", max_streak, [3, 7, 14, 30, 50, 75, 125, 180, 250, 365])
 
 section("Creations")
 for months_ago in range(1,12):
