@@ -188,7 +188,7 @@ if len(achievements) > 0:
         answer = input("Do you want to toot this? ")
         if answer == "y" or answer == "yes":
             mastodon = Mastodon(access_token = config["ACCESS_TOKEN"], api_base_url = config["API_BASE_URL"])
-            mastodon.toot(toot)
+            mastodon.status_post(toot, visibility="unlisted")
 
 upcoming = db.upcoming_achievements(now)
 
