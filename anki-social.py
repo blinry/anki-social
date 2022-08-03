@@ -5,6 +5,8 @@ import glob
 import appdirs
 import os
 import sys
+from dotenv import dotenv_values
+from mastodon import Mastodon
 
 def find_db_path():
     path = None
@@ -149,7 +151,6 @@ last_run_file = sys.path[0]+'/last_run'
 if os.path.exists(last_run_file):
     with open(last_run_file, 'r') as f:
         last_run = dt(int(f.read()))
-        print("Last run: {}".format(last_run))
 else:
     print("Running script for the first time!")
     last_run = now
@@ -172,10 +173,22 @@ db.print_stats()
 
 achievements = db.generate_achievements_since(now, last_run)
 
+toot = ""
+
 if len(achievements) > 0:
-    print("\nNew achievements!\n")
+    toot += "I got a new Anki achievement! #ankisocial\n"
     for achievement in achievements:
-        print("- " + achievement)
+        toot += "\n- " + achievement
+    print(">>>")
+    print(toot)
+    print("<<<")
+
+    config = dotenv_values(".env")
+    if "ACCESS_TOKEN" in config and "API_BASE_URL" in config:
+        answer = input("Do you want to toot this? ")
+        if answer == "y" or answer == "yes":
+            mastodon = Mastodon(access_token = config["ACCESS_TOKEN"], api_base_url = config["API_BASE_URL"])
+            mastodon.toot(toot)
 
 upcoming = db.upcoming_achievements(now)
 
