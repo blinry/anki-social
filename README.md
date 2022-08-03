@@ -1,4 +1,8 @@
-Social features for Anki!
+## anki-social
+
+This script looks at your Anki database and generates achievements from it, like "7-day streak" or "reviewed 1000 total cards"!
+
+It works on the desktop and on Android, using Termux.
 
 ## Setup
 
